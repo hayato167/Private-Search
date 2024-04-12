@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Non-URL Changing Search Engine</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-size: 28px;
+}
+
+#searchForm {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#query {
+  width: 70%;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+#query::placeholder {
+  color: #aaa;
+}
+
+#query:focus {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#searchBtn {
+  padding: 12px 24px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#searchBtn:hover {
+  background-color: #0056b3;
+}
+
+#results {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.result {
+  margin-bottom: 20px;
+}
+
+.result h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.result p {
+  color: #666;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Non-URL Changing Search Engine</h1>
+
+<form id="searchForm">
+  <input type="text" id="query" placeholder="Enter your search query">
+  <button type="submit" id="searchBtn">Search</button>
+</form>
+
+<div id="results"></div>
+
+</div>
+
+<script>
+$(document).ready(function() {
+  $("#searchForm").submit(function(event) {
+    event.preventDefault();
+    var query = $("#query").val();
+    if (query.trim() !== "") {
+      searchGoogle(query);
+    }
+  });
+
+  // Enterキーを押しても検索を実行する
+  $("#query").keypress(function(event) {
+    if (event.keyCode === 13) { // Enterキーのキーコードは13
+      event.preventDefault(); // デフォルトのフォーム送信を防ぐ
+      $("#searchForm").submit(); // フォームを手動で送信
+    }
+  });
+});
+
+function searchGoogle(query) {
+  var endpoint = "https://www.google.com/search";
+  var params = {
+    q: query
+  };
+
+  $.ajax({
+    url: endpoint,
+    data: params,
+    success: function(response) {
+      displayResults(response);
+    },
+    error: function(xhr, status, error) {
+      console.error("Error:", error);
+    }
+  });
+}
+
+function displayResults(data) {
+  var resultsDiv = $("#results");
+  resultsDiv.html(data);
+}
+</script>
+
+</body>
+</html>
